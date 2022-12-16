@@ -4,6 +4,8 @@ package src.main;
 import java.util.Scanner;
 
 import src.main.model.account.Account;
+import src.main.model.account.Personal;
+import src.main.model.account.TFSA;
 import src.main.utils.Color;
 
 public class Main {
@@ -15,21 +17,54 @@ public class Main {
     public static void main(String[] args) { 
             traderIntro();   
             explainApp();
-            String choice = accountChoice();
-            Integer incomingFunds = initialfunds();
-            if (choice.equalsIgnoreCase("a")){
-                // create personal
-            }else{
-                //create FFSA
+            account = createAccount();
+            initialBalance();
+
+            for (int day = 1; day <= 2160; day++) {
+
             }
+            
       
     }
-    public static Integer initialfunds(){
-        Integer funds = 0;
+    public static Account createAccount(){
+        String choice = accountChoice();
+        Double incomingFunds = initialfunds();
+        Boolean userconfirmed = accountConfirmation(choice, incomingFunds);
+        if(!userconfirmed){
+            choice = accountChoice();
+            incomingFunds = initialfunds();
+            userconfirmed = accountConfirmation(choice, incomingFunds);
+        }
+         
+        if (choice.equalsIgnoreCase("a")){
+            return new Personal(incomingFunds);
+        }else{
+            return new TFSA(incomingFunds);
+            
+        }
+        
+    }
+ 
+    public static Boolean accountConfirmation(String account, Double fund){
+        System.out.print("\nPlease confirm your selection:");
+        System.out.print("\nAccount:" + Color.YELLOW + (account.equalsIgnoreCase("a")?"Personal Account":"TFSA Account") + Color.RESET );
+        System.out.print("\nInitial fund :" + Color.YELLOW + fund + Color.RESET +"\n");
+        System.out.print("\nType 'y' to confirm or 'n' to  decline ");
+        scanner.nextLine();
+        String confirmation = scanner.nextLine();
+        while (!confirmation.equalsIgnoreCase("y") && !confirmation.equalsIgnoreCase("n")) {
+            System.out.print("\n Type 'y' to confirm or 'n' to  decline ");
+            confirmation = scanner.nextLine();
+        }
+        return confirmation.equalsIgnoreCase("y")?true:false;
+
+    }
+    public static Double initialfunds(){
+        Double funds = 0.0;
         while( !(funds > 0 )){
-            System.out.print("\nHow much would you like to put into your account (To the nearest full pound)?");
-            if (scanner.hasNextInt()) {
-            funds = scanner.nextInt();
+            System.out.print("\nHow much would you like to put into your account ?\n");
+            if (scanner.hasNextDouble()) {
+            funds = scanner.nextDouble();
             }else{
                 scanner.nextLine();
                 System.out.println(("\nInvalid Input. Please try again."));
@@ -56,7 +91,7 @@ public class Main {
     
     public static void initialBalance() {
         System.out.print("\n\n  You created a " + Color.YELLOW + account.getClass().getSimpleName() + Color.RESET + " account.");
-        System.out.println(" Your account balance is " + Color.GREEN + "$" + "<account.getFunds()>" + Color.RESET);
+        System.out.println(" Your account balance is " + Color.GREEN + "$" + account.getFunds() + Color.RESET);
         System.out.print("\n  Enter anything to start trading: ");
         scanner.nextLine();
     }
