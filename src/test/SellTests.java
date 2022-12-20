@@ -27,7 +27,6 @@ public class SellTests {
         Account personal = new Personal(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
-        personal.getFunds();
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)),true);
         
            
@@ -37,7 +36,6 @@ public class SellTests {
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
-        tfsa.getFunds();
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)),true);
        
            
@@ -48,7 +46,6 @@ public class SellTests {
         Account personal = new Personal(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,10)),true);
-        personal.getFunds();
         assertFalse(personal.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)));
        
            
@@ -58,7 +55,6 @@ public class SellTests {
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,10)),true);
-        tfsa.getFunds();
         assertFalse(tfsa.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)));
         
     }
@@ -69,9 +65,8 @@ public class SellTests {
         Account personal = new Personal(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
-        personal.getFunds();
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)),true);
-        assertEquals(personal.getFunds(),1742.6106734999998);
+        assertEquals(personal.getFunds(),Double.valueOf(1742.6106734999998));
            
     }
     // check TFSA balance is correct after a sell
@@ -80,9 +75,8 @@ public class SellTests {
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
-        tfsa.getFunds();
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)),true);
-        assertEquals(tfsa.getFunds(),1782.0156726999999);
+        assertEquals(tfsa.getFunds(),Double.valueOf(1782.0156726999999));
            
            
     }
