@@ -33,12 +33,11 @@ public class AccountCreation {
         
         assertTrue(account.getSellFee()==0.01);
     }
-    @Test
-    public void checkNoStartingShares(){
 
-    }
     @Test
     public void checkAvailableBalance(){
+        TFSA account = new TFSA(1000.0);
+        assertTrue(account.getFunds()==1000.0);
         
     }
 

@@ -1,11 +1,17 @@
 package src.main;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import src.main.model.account.Account;
 import src.main.model.account.Personal;
 import src.main.model.account.TFSA;
+import src.main.model.trade.Trade;
 import src.main.utils.Color;
 
 public class Main {
@@ -15,13 +21,23 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
   
     public static void main(String[] args) { 
+            
             traderIntro();   
             explainApp();
             account = createAccount();
             initialBalance();
-
+        
             for (int day = 1; day <= 2160; day++) {
-
+                System.out.println("\n----------- Day"+ day+" -----------");
+                
+                System.out.println("\n"+account.toString());
+                System.out.println("\n");
+                displayPrices(day);
+                String choice = buyOrSell();
+                StockType stock = chooseStock();
+                int shares = numShares(choice);
+                String result = account.makeTrade(new Trade((choice.equals("buy") ? TradeType.MARKET_BUY : TradeType.MARKET_SELL),stock, Double.parseDouble(getPrice(stock,day)),shares))?"success":"failure";
+                System.out.println(result);
             }
             
       
@@ -29,11 +45,10 @@ public class Main {
     public static Account createAccount(){
         String choice = accountChoice();
         Double incomingFunds = initialfunds();
-        Boolean userconfirmed = accountConfirmation(choice, incomingFunds);
-        if(!userconfirmed){
+        
+        while (Boolean.FALSE.equals(accountConfirmation(choice, incomingFunds))){
             choice = accountChoice();
             incomingFunds = initialfunds();
-            userconfirmed = accountConfirmation(choice, incomingFunds);
         }
          
         if (choice.equalsIgnoreCase("a")){
@@ -56,12 +71,12 @@ public class Main {
             System.out.print("\n Type 'y' to confirm or 'n' to  decline ");
             confirmation = scanner.nextLine();
         }
-        return confirmation.equalsIgnoreCase("y")?true:false;
+        return confirmation.equalsIgnoreCase("y");
 
     }
     public static Double initialfunds(){
         Double funds = 0.0;
-        while( !(funds > 0 )){
+        while( funds <= 0){
             System.out.print("\nHow much would you like to put into your account ?\n");
             if (scanner.hasNextDouble()) {
             funds = scanner.nextDouble();
@@ -76,7 +91,7 @@ public class Main {
         System.out.print(Color.GREEN + "\n ---------------------  STOCK TRADING SIMULATOR  ---------------------");
         System.out.print(Color.GREEN + "\n                              Good Morning.");
         System.out.print(Color.GREEN + "\n                  In this simulator you will trade stocks.");
-        System.out.print(Color.GREEN + "\n               There are two types of accounst to choose from.");
+        System.out.print(Color.GREEN + "\n               There are two types of accounts to choose from.");
         System.out.print(Color.GREEN + "\n ----------------------------------------------------------------------  ");
 
     }
@@ -118,14 +133,15 @@ public class Main {
         return choice;
     }
 
-    public static String chooseStock() {
+    public static StockType chooseStock() {
         System.out.print("  Choose a stock: ");
-        String stock = scanner.nextLine(); 
-        while (!stock.equals("AAPL") && !stock.equals("FB") && !stock.equals("GOOG") && !stock.equals("TSLA") ) {
+        String stockString = scanner.nextLine(); 
+        while (!stockString.equalsIgnoreCase("AAPL") && !stockString.equalsIgnoreCase("FB") && !stockString.equalsIgnoreCase("GOOG") && !stockString.equalsIgnoreCase("TSLA") ) {
             System.out.print("  Choose a stock: ");
-            stock = scanner.nextLine();
+            stockString = scanner.nextLine();
         }
-        return stock;
+        
+        return StockType.valueOf(stockString.toUpperCase());
     }
 
     public static int numShares(String choice) {
@@ -141,17 +157,17 @@ public class Main {
         return shares;
     }
     
-    /* TODO
+    
     public static void displayPrices(int day) {
         System.out.println("\n\n\t  DAY " + day + " PRICES\n");
 
-        System.out.println("  " + Color.BLUE + Stock.AAPL + "\t\t" + Color.GREEN + getPrice(Stock.AAPL, day));
-        System.out.println("  " + Color.BLUE + Stock.FB + "\t\t" + Color.GREEN + getPrice(Stock.FB, day));
-        System.out.println("  " + Color.BLUE + Stock.GOOG + "\t\t" + Color.GREEN + getPrice(Stock.GOOG, day));
-        System.out.println("  " + Color.BLUE + Stock.TSLA + "\t\t" + Color.GREEN + getPrice(Stock.TSLA, day) + Color.RESET);
+        System.out.println("  " + Color.BLUE + StockType.AAPL + "\t\t" + Color.GREEN + getPrice(StockType.AAPL, day));
+        System.out.println("  " + Color.BLUE + StockType.FB + "\t\t" + Color.GREEN + getPrice(StockType.FB, day));
+        System.out.println("  " + Color.BLUE + StockType.GOOG + "\t\t" + Color.GREEN + getPrice(StockType.GOOG, day));
+        System.out.println("  " + Color.BLUE + StockType.TSLA + "\t\t" + Color.GREEN + getPrice(StockType.TSLA, day) + Color.RESET);
 
     }
-    */
+    
     public static void tradeStatus(String result) {
         System.out.println("\n  The trade was " + (result.equals("successful") ? Color.GREEN : Color.RED) + result + Color.RESET + ". Here is your portfolio:");
         System.out.println(account);
@@ -160,16 +176,30 @@ public class Main {
     }
     
     
-    /* TODO
-    public static String getPrice(Stock stock, int day) {
-        return "15.2343";
+    
+    public static String getPrice(StockType stock, int day) {
+        //TODO ROUND TO 2.d.p
+        Path path = getPath(stock.toString());
+        try (Stream<String> stream = Files.lines(path)){
+            return stream.skip(1).filter(list->Integer.valueOf(list.split(",")[0])==day).map(list->list.split(",")[1]).findFirst().orElse(null);
+            
+        } catch (IOException e) {
+			e.printStackTrace();
+            return null;
+		}
+        
     }
 
 
     public static Path getPath(String stock) {
-        return null;
+        try {
+            return Paths.get(Thread.currentThread().getContextClassLoader().getResource("src/main/data/"+stock+".csv").toURI());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
-    */
+    
 
 
 }

@@ -5,9 +5,9 @@ public class Trade {
     TradeType trade;
     StockType stock;
     Double stockPrice;
-    Double shares;
+    int shares;
 
-    public Trade(TradeType trade, StockType stock, Double stockPrice, Double shares) {
+    public Trade(TradeType trade, StockType stock, Double stockPrice, int shares) {
         this.trade = trade;
         this.stock = stock;
         this.stockPrice = stockPrice;
@@ -32,7 +32,7 @@ public class Trade {
         return this.stockPrice;
     }
 
-    public Double getShares() {
+    public int getShares() {
         return this.shares;
     }
 
