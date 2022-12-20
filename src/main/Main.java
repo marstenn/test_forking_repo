@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -145,13 +146,31 @@ public class Main {
     }
 
     public static int numShares(String choice) {
+        int shares =-1;
         System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
-        int shares = scanner.nextInt(); 
+        try {
+            int number = scanner.nextInt();
+            shares = scanner.nextInt(); 
+        }
+        catch(InputMismatchException e) {
+            System.out.println("Enter integer numbers only");
+            System.out.println(scanner.next() + " was not valid input.");
+            
+        }
+        
         scanner.nextLine(); //throwaway nextLine
         while (shares <= 0) {
             System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
-            shares = scanner.nextInt();
-            scanner.nextLine(); //throwaway nextLine
+            try {
+                int number = scanner.nextInt();
+                shares = scanner.nextInt();
+                scanner.nextLine(); //throwaway nextLine
+            }
+            catch(InputMismatchException e) {
+                System.out.println("Enter integer numbers only");
+                System.out.println(scanner.next() + " was not valid input.");
+            }
+            
 
         }
         return shares;
