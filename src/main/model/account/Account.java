@@ -1,6 +1,7 @@
 package src.main.model.account;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import src.main.StockType;
@@ -29,7 +30,7 @@ public abstract class Account {
     }
     private Map<StockType, Double> copyMap(Map<StockType, Double> map) {
         return map.entrySet().stream()
-            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
     protected Account(Account source) {
         this.portfolio = (HashMap<StockType, Double>) copyMap(source.portfolio);

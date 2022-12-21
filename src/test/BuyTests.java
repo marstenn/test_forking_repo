@@ -16,13 +16,13 @@ import src.main.model.trade.Trade;
 public class BuyTests {
     // test where they buy trade and they have the money for it
     @Test
-    public void PersonalSuccessfulBuyTrade(){
+    public void successfulBuyTradePersonal(){
         Account personal = new Personal(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
     }
     @Test
-    public void TFSASuccessfulBuyTrade(){
+    public void successfulBuyTradeTFSA(){
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
@@ -30,14 +30,14 @@ public class BuyTests {
     }
     // test where they have insuffient funds
     @Test
-    public void PersonalFailedBuyTrade(){
+    public void failedBuyTradePersonal(){
         Account personal = new Personal(200.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),false);
 
     }
     @Test
-    public void TFSAFailedBuyTrade(){
+    public void failedBuyTradeTFSA(){
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,200)),false);
@@ -45,7 +45,7 @@ public class BuyTests {
     }
     // check personal balance is correct after a purchase
     @Test
-    public void PersonalBalanceAfterBuyTrade(){
+    public void balanceAfterBuyTradePersonal(){
         Account personal = new Personal(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
@@ -53,7 +53,7 @@ public class BuyTests {
     } 
     // check TFSA balance is correct after a purchase
     @Test
-    public void TFSABalanceAfterBuyTrade(){
+    public void balanceAfterBuyTradeTFSA(){
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
@@ -62,7 +62,7 @@ public class BuyTests {
     }
     // check personal shares are correct after purchase
     @Test
-    public void PersonalSharesAfterBuyTrade(){
+    public void sharesAfterBuyTradePersonal(){
         Account personal = new Personal(20000.0);
         StockType stock = StockType.AAPL;
         assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,200)),true);
@@ -71,7 +71,7 @@ public class BuyTests {
     }
     // check TFSA shares are correct after purchase
     @Test
-    public void TFSASharesAfterBuyTrade(){
+    public void sharesAfterBuyTradeTFSA(){
         Account tfsa = new TFSA(2000.0);
         StockType stock = StockType.AAPL;
         assertEquals(tfsa.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);

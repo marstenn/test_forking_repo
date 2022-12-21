@@ -37,7 +37,8 @@ public class Main {
                 String choice = buyOrSell();
                 StockType stock = chooseStock();
                 int shares = numShares(choice);
-                String result = account.makeTrade(new Trade((choice.equals("buy") ? TradeType.MARKET_BUY : TradeType.MARKET_SELL),stock, Double.parseDouble(getPrice(stock,day)),shares))?"success":"failure";
+                TradeType trade = choice.equals("buy") ? TradeType.MARKET_BUY : TradeType.MARKET_SELL;
+                String result = account.makeTrade(new Trade(trade,stock, Double.parseDouble(getPrice(stock,day)),shares))?"success":"failure";
                 System.out.println(result);
             }
             
@@ -149,7 +150,6 @@ public class Main {
         int shares =-1;
         System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
         try {
-            int number = scanner.nextInt();
             shares = scanner.nextInt(); 
         }
         catch(InputMismatchException e) {
@@ -162,7 +162,7 @@ public class Main {
         while (shares <= 0) {
             System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
             try {
-                int number = scanner.nextInt();
+                
                 shares = scanner.nextInt();
                 scanner.nextLine(); //throwaway nextLine
             }
@@ -197,7 +197,6 @@ public class Main {
     
     
     public static String getPrice(StockType stock, int day) {
-        //TODO ROUND TO 2.d.p
         Path path = getPath(stock.toString());
         try (Stream<String> stream = Files.lines(path)){
             return stream.skip(1).filter(list->Integer.valueOf(list.split(",")[0])==day).map(list->list.split(",")[1]).findFirst().orElse(null);
