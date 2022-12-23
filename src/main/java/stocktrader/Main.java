@@ -1,4 +1,4 @@
-package src.main;
+package stocktrader;
 
 
 import java.io.IOException;
@@ -8,11 +8,11 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-import src.main.model.account.Account;
-import src.main.model.account.Personal;
-import src.main.model.account.TFSA;
-import src.main.model.trade.Trade;
-import src.main.utils.Color;
+import stocktrader.model.account.Account;
+import stocktrader.model.account.Personal;
+import stocktrader.model.account.TFSA;
+import stocktrader.model.trade.Trade;
+import stocktrader.utils.Color;
 
 public class Main {
 

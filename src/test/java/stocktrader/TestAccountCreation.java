@@ -1,12 +1,10 @@
-package src.test;
- import static org.junit.jupiter.api.Assertions.assertTrue;
+package stocktrader;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import stocktrader.model.account.Personal;
+import stocktrader.model.account.TFSA;
 
-import org.junit.Test;
-
-
-import src.main.model.account.Personal;
-import src.main.model.account.TFSA;
-public class AccountCreation {
+public class TestAccountCreation {
    
 
     @Test

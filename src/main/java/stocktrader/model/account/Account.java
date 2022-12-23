@@ -1,11 +1,13 @@
-package src.main.model.account;
+package stocktrader.model.account;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import src.main.StockType;
 
-import src.main.utils.Color;
+import stocktrader.utils.Color;
+
+import stocktrader.StockType;
+
 
 public abstract class Account {
     Double funds;

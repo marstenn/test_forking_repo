@@ -1,6 +1,6 @@
-package src.main.model.trade;
-import src.main.StockType;
-import  src.main.TradeType;
+package stocktrader.model.trade;
+import stocktrader.StockType;
+import  stocktrader.TradeType;
 public class Trade {
     TradeType trade;
     StockType stock;
