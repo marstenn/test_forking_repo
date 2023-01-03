@@ -1,0 +1,48 @@
+Feature: As a trader I should be able to buy and sell shares
+
+Scenario: As a trader I can make a personal trading account
+
+Scenatio : As a trader I can make a TFSA trdaing account
+
+
+
+Scenario: As a trader I can buy a number of shares from the market
+Given I have made a trading account
+And there is "500" in the account fund
+And there is "0" "FB" stock in the portfolio
+When I select to buy a "FB" stock for "15" per stock
+Then the amount of "FB" stock is "1" in the portfolio
+And the fund contains "485"
+
+
+Scenario: As a trader I can sell a number of shares to the market
+Given I have made a trading account
+And there is "500" in the account fund
+And the portfolio contains "5" "FB" stock
+When I select to sell "FB" stock at "15" per stock
+Then I have sold "5" "FB" stock for a total of "71.7"
+And the fund contains "571.7"
+
+
+Scenario: As a trader I cannot buy a number of shares from the market
+Given I have made a trading account
+But there is "5" in the account fund
+And the portfolio contains "0" "FB" stock
+When I select to buy a "FB" stock at "15" per stock
+Then a failure message is displayed to the user
+And the portfolio contains "0" "FB" stock
+And the amount in the fund stays "5"
+
+Scenario: As a trader I cannot sell a number of shares to the market
+Given I have made a trading account
+But there is "5" in the account fund
+And the portfolio contains "0" "FB" stock
+When I select to sell a stock
+Then a failure message is displayed to the user
+And the portfolio contains "0" "FB" stock
+And the amount in the fund stays "5"
+
+
+# Given = setup
+# When = act
+# Then = assert

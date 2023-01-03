@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -36,7 +37,8 @@ public class Main {
                 String choice = buyOrSell();
                 StockType stock = chooseStock();
                 int shares = numShares(choice);
-                String result = account.makeTrade(new Trade((choice.equals("buy") ? TradeType.MARKET_BUY : TradeType.MARKET_SELL),stock, Double.parseDouble(getPrice(stock,day)),shares))?"success":"failure";
+                TradeType trade = choice.equals("buy") ? TradeType.MARKET_BUY : TradeType.MARKET_SELL;
+                String result = account.makeTrade(new Trade(trade,stock, Double.parseDouble(getPrice(stock,day)),shares))?"success":"failure";
                 System.out.println(result);
             }
             
@@ -145,13 +147,30 @@ public class Main {
     }
 
     public static int numShares(String choice) {
+        int shares =-1;
         System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
-        int shares = scanner.nextInt(); 
+        try {
+            shares = scanner.nextInt(); 
+        }
+        catch(InputMismatchException e) {
+            System.out.println("Enter integer numbers only");
+            System.out.println(scanner.next() + " was not valid input.");
+            
+        }
+        
         scanner.nextLine(); //throwaway nextLine
         while (shares <= 0) {
             System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
-            shares = scanner.nextInt();
-            scanner.nextLine(); //throwaway nextLine
+            try {
+                
+                shares = scanner.nextInt();
+                scanner.nextLine(); //throwaway nextLine
+            }
+            catch(InputMismatchException e) {
+                System.out.println("Enter integer numbers only");
+                System.out.println(scanner.next() + " was not valid input.");
+            }
+            
 
         }
         return shares;
@@ -178,7 +197,6 @@ public class Main {
     
     
     public static String getPrice(StockType stock, int day) {
-        //TODO ROUND TO 2.d.p
         Path path = getPath(stock.toString());
         try (Stream<String> stream = Files.lines(path)){
             return stream.skip(1).filter(list->Integer.valueOf(list.split(",")[0])==day).map(list->list.split(",")[1]).findFirst().orElse(null);

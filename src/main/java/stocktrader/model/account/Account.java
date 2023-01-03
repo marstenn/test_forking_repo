@@ -1,6 +1,7 @@
 package stocktrader.model.account;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 
@@ -15,9 +16,11 @@ public abstract class Account {
     Double funds;
     Double sellFee;
     Double buyFee;
+    Trade[] tradeHistory;
     HashMap<StockType,Double> portfolio = new HashMap<StockType,Double>();
-    public Account(Double funds) {
+    protected Account(Double funds) {
         this.funds = funds;
+        
         createPortoflio();
 
     }
@@ -30,9 +33,9 @@ public abstract class Account {
     }
     private Map<StockType, Double> copyMap(Map<StockType, Double> map) {
         return map.entrySet().stream()
-            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
-    public Account(Account source) {
+    protected Account(Account source) {
         this.portfolio = (HashMap<StockType, Double>) copyMap(source.portfolio);
         this.funds = source.funds;
     }
@@ -50,7 +53,9 @@ public abstract class Account {
     public Double getBuyFee(){
         return buyFee;
     }
-    
+    public  HashMap<StockType,Double> getPortofolio(){
+        return this.portfolio;
+    }
     public String toString() {
         return "\n  Stock\t\t"  + Color.RESET + "Shares" +
         "\n\n" + displayPortofolio() + Color.RESET +
@@ -93,6 +98,8 @@ public abstract class Account {
     }
 
 
+    
+    
 
 
 
