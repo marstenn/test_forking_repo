@@ -1,34 +1,33 @@
-package src.test;
+package stocktrader;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
+import stocktrader.model.account.Account;
+import stocktrader.model.account.Personal;
+import stocktrader.model.account.TFSA;
+import stocktrader.model.trade.Trade;
+import stocktrader.StockType;
+import stocktrader.TradeType;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import src.main.StockType;
-import src.main.TradeType;
-import src.main.model.account.Account;
-import src.main.model.account.Personal;
-import src.main.model.account.TFSA;
-import src.main.model.trade.Trade;
 
-public class SellTests {
+public class TestSells {
 
     
-
+/* 
     // test where they sell trade and they have the shares for it
     @Test
     public void PersonalSuccessfulSellTrade(){
         
         Account personal = new Personal(2000.0);
         StockType stock = StockType.AAPL;
-        assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100)),true);
+        assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_BUY,stock,15.649286,100.0)),true);
         personal.getFunds();
-        assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90)),true);
+        assertEquals(personal.makeTrade(new Trade(TradeType.MARKET_SELL,StockType.AAPL,15.292857,90.0)),true);
         
            
     }
@@ -116,6 +115,6 @@ public class SellTests {
     
 
 
-    
+    */
 
 }

@@ -1,4 +1,4 @@
-package src.main.model.account;
+package stocktrader.model.account;
 
 public class Personal extends Account{
     

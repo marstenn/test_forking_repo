@@ -1,4 +1,4 @@
-package src.main.utils;
+package stocktrader.utils;
 
 public class Color {
     public static final String RESET = "\u001B[0m";
