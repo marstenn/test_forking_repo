@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import stocktrader.utils.Color;
 
 import stocktrader.StockType;
+import stocktrader.TradeType;
+import stocktrader.model.trade.Trade;
 
 
 public abstract class Account {
@@ -54,6 +56,42 @@ public abstract class Account {
         "\n\n" + displayPortofolio() + Color.RESET +
         "\n  Funds Left\t" + Color.GREEN + "$" + Math.round(this.getFunds()) + Color.RESET;
     }
+    public boolean makeTrade(Trade trade){
+        return (trade.getTrade().equals(TradeType.MARKET_BUY)? makeBuyTrade(trade): makeSellTrade(trade));
+           
+        
+        
+    }
+    public boolean makeBuyTrade(Trade trade){
+
+        Double fundBalance = this.funds-((trade.getStockPrice()*trade.getShares())+(trade.getStockPrice()*trade.getShares())*getBuyFee());
+        if(fundBalance>=0){
+            this.funds = fundBalance;
+            portfolio.replace(trade.getStock(), (portfolio.get(trade.getStock())+trade.getShares()));
+
+
+
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    public boolean makeSellTrade(Trade trade){
+   
+        Double stockShares = portfolio.get(trade.getStock());
+        Double newStockShares = stockShares - trade.getShares();
+        if (newStockShares>=0){
+            this.funds = this.funds + ((trade.getStockPrice()*trade.getShares())-(trade.getStockPrice()*trade.getShares())*getSellFee());
+            portfolio.replace(trade.getStock(), (portfolio.get(trade.getStock())-trade.getShares()));
+
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
 
 
 
