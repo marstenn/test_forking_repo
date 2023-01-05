@@ -2,6 +2,7 @@ package stocktrader;
 
 
 import java.io.IOException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -128,7 +129,7 @@ public class Main {
     public static String buyOrSell() {
         System.out.print("\n\n  Would you like to 'buy' or 'sell': ");
         String choice = scanner.nextLine();
-        while (!choice.equals("buy") && !choice.equals("sell")) {
+        while (!choice.equalsIgnoreCase("buy") && !choice.equalsIgnoreCase("sell")) {
             System.out.print("  Would you like to 'buy' or 'sell': ");
             choice = scanner.nextLine();
         }
@@ -211,7 +212,9 @@ public class Main {
 
     public static Path getPath(String stock) {
         try {
-            return Paths.get(Thread.currentThread().getContextClassLoader().getResource("src/main/data/"+stock+".csv").toURI());
+            //return Paths.get(Thread.currentThread().getContextClassLoader().getResource("src/main/resources/data/"+stock+".csv").toURI());
+            return Paths.get(ClassLoader.getSystemResource("data/"+stock+".csv").toURI());
+            //InputStream is = getClass().getClassLoader().getResourceAsStream("file.txt");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
