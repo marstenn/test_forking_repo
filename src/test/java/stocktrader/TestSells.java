@@ -90,6 +90,8 @@ public class TestSells {
         assertEquals(portfolio.get(StockType.AAPL),110);
            
     }
+
+    
     // check TFSA shares are correct after sell
     @Test
     public void correctSharesAfterSellTFSA(){
